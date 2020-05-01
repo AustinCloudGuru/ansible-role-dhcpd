@@ -1,0 +1,63 @@
+# dhcpd.conf
+# {{ ansible_managed }}
+#
+
+# Global Options
+{% if dhcp_global_domain_name is defined %}
+option domain-name "{{ dhcp_global_domain_name }}";
+{% endif %}
+{% if dhcp_global_domain_name_servers is defined %}
+{% if dhcp_global_domain_name_servers is string %}
+option domain-name-servers {{ dhcp_global_domain_name_servers }};
+{% else %}
+option domain-name-servers {{ dhcp_global_domain_name_servers|join(', ') }};
+{% endif %}
+{% endif %}
+{% if dhcp_global_default_lease_time is defined %}
+default-lease-time {{ dhcp_global_default_lease_time }};
+{% endif %}
+{% if dhcp_global_max_lease_time is defined %}
+max-lease-time {{ dhcp_global_max_lease_time }};
+{% endif %}
+{% if dhcp_global_ddns_updates_style is defined %}
+ddns-update-style "{{ dhcp_global_ddns_updates_style }}";
+{% else %}
+ddns-update-style none;
+{% endif %}
+{% if dhcp_global_authoritative is sameas true %}
+authoritative;
+{% endif %}
+
+# Subnets
+{% for subnet in dhcp_subnets %}
+subnet {{ subnet.ip }} netmask {{ subnet.netmask }} {
+{% if subnet.range is defined %}
+  range {{ subnet.range |join(' ') }};
+{% endif %}
+{% if subnet.domain_name_servers is defined %}
+{% if subnet.domain_name_servers is string %}
+  option domain-name-server {{ subnet.domain_name_servers }};
+{% else %}
+  option domain-name-server {{ subnet.domain_name_servers|join(', ') }};
+{% endif %}
+{% endif %}
+{% if subnet.domain_name is defined %}
+  option domain-name {{ subnet.domain_name }};
+{% endif %}
+{% if subnet.subnet_mask is defined %}
+  option subnet-mask {{ subnet.subnet_mask }};
+{% endif %}
+{% if subnet.routers is defined %}
+  option routers {{ subnet.routers }};
+{% endif %}
+{% if subnet.broadcast_address is defined %}
+  option broadcast_address {{ subnet.broadcast_address }};
+{% endif %}
+{% if subnet.default_lease_time is defined %}
+  option default_lease_time {{ subnet.default_lease_time }};
+{% endif %}
+{% if subnet.max_lease_time is defined %}
+  option max_lease_time {{ subnet.max_lease_time }};
+{% endif %}
+}
+{% endfor %}

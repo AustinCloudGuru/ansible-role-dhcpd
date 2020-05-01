@@ -1,2 +1,18 @@
 ---
-# tasks file for ansible-role-dhcpd
+- name: Include the Packages for each OS
+  include_vars: "{{ ansible_os_family }}.yml"
+
+- name: Install Extra Packages
+  package:
+    name: "{{ dhcpd_package_list }}"
+    state: present
+
+- name: Install configuration file
+  template:
+    src: dhcpd.conf.j2
+    dest: "{{ dhcpd_config_dir }}/dhcpd.conf"
+    owner: root
+    group: root
+    mode: 0644
+    validate: 'dhcpd -t -cf %s'
+  #notify: restart dhcp

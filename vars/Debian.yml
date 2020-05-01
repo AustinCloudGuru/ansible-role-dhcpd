@@ -1,0 +1,5 @@
+---
+dhcpd_package_list:
+  - isc-dhcp-server
+
+dhcpd_config_dir: /etc/dhcp
