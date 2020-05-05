@@ -17,7 +17,7 @@
     mode: 0644
     validate: 'dhcpd -t -cf %s'
   become: true
-  notify: restart dhcp
+  notify: restart dhcpd
 
 - name: Enable dhcpd
   service:
