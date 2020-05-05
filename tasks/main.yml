@@ -6,6 +6,7 @@
   package:
     name: "{{ dhcpd_package_list }}"
     state: present
+  become: true
 
 - name: Install configuration file
   template:
@@ -15,4 +16,5 @@
     group: root
     mode: 0644
     validate: 'dhcpd -t -cf %s'
-  #notify: restart dhcp
+  become: true
+  notify: restart dhcp
