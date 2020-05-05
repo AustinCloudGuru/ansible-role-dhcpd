@@ -1,5 +1,6 @@
 ---
 galaxy_info:
+  role_name: dhcpd
   author: Mark Honomichl
   description: Installs a dhcpd Server
   company: AustinCloudGuru
