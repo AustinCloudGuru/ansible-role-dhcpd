@@ -8,6 +8,13 @@
     state: present
   become: true
 
+- name: Update Defaults to only IPV4
+  lineinfile:
+    dest: /etc/default/isc-dhcp-server
+    line: 'INTERFACESv4="{{ ansible_default_ipv4.interface }}"'
+    regexp: '^INTERFACESv4='
+  become: true
+
 - name: Install configuration file
   template:
     src: dhcpd.conf.j2
@@ -24,11 +31,4 @@
     name: "{{ dhcpd_service }}"
     state: started
     enabled: true
-  become: true
-
-- name: Update Defaults to only IPV4
-  lineinfile:
-    dest: /etc/default/isc-dhcp-server
-    line: 'INTERFACESv4="{{ ansible_default_ipv4.interface }}"'
-    regexp: '^INTERFACESv4='
   become: true
