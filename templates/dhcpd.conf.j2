@@ -63,9 +63,11 @@ subnet {{ subnet.ip }} netmask {{ subnet.netmask }} {
 {% endfor %}
 
 # Static leases
+{% if dhcp_static_leases is defined %}
 {% for host in dhcp_static_leases %}
 host {{ host.name }} {
   hardware ethernet {{ host.ethernet }};
   fixed-address {{ host.address }};
 }
 {% endfor %}
+{% endif %}
